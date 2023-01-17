@@ -1,113 +1,155 @@
 '''
-## №1
-## Напишите программу, которая принимает на вход вещественное число и показывает сумму его цифр.
+## №38
+## Напишите программу, удаляющую из текста все слова, содержащие ""абв"".
 
-def summ(num):
+firstStr = 'Михаил абв Калугин аБВ хотел написать АбВ код. Получилось как всегда. АБВ'
 
-    if (',' in num):
-        num = num.replace(',', '')
+secondStr = list(filter(lambda el: 'абв' not in el.lower(), firstStr.split() ))
 
-    num = num.replace('.', '')
-
-    strlist = list(num)
-    numsum = 0
-
-    for i in strlist:
-        i = int(i)
-        numsum +=i
-
-    print(f'Сумма цифр вашего числа = {numsum}')
-
-num = input('Введите число больше 0: ')
-summ(num)
+print(f'Изначальная строка: ')
+print(firstStr)
+print(f'Строка без слов, содержащих "АБВ": ')
+print(*secondStr)
 '''
 '''
 ## №2
-## Напишите программу, которая принимает на вход число N и выдает набор произведений чисел от 1 до N.
-
-def multiplying(num):
-
-    num = int(num)
-
-    arr = [i*1 for i in range(1, num+1)]
-
-    sumnum = 1
-    arrNum = []
-    for j in arr:
-        sumnum *=j
-        arrNum.append(sumnum)
-
-    print(f'Набор произвдений от 1 до {num} = {arrNum} ')
-
-
-
-num = input('Введите целое число: ')
-
-
-if int(num)<1:
-    print('Число должно быть больше 1!')
-else:
-    multiplying(num)
-'''
-'''
-## №3
-## Задайте список из n чисел последовательности $(1+\frac 1 n)^n$ и выведите на экран их сумму.
-
-def sequence(num):
-
-    arr = [i * 1 for i in range(1, num + 1)]
-    sumnum = 0
-
-    for j in arr:
-        expr = (1+1/j)**j
-        sumnum += expr
-
-    return round(sumnum, 3)
-
-num = int(input('Введите число: '))
-
-print(sequence(num))
-'''
-'''
-## №4
-## Задайте список из N элементов, заполненных числами из промежутка [-N, N]. Найдите произведение элементов на указанных позициях. Позиции хранятся в файле file.txt в одной строке одно число.
+## Напишите программу, которая найдёт произведение пар чисел списка. Парой считаем первый и последний элемент, второй и предпоследний и т.д.
 
 import random
 
-num = int(input("Ведите число: ")) # в данном случае >5, либо строку 85, 86 под замену
-arr = []
-for i in range(num):
-    arr.append(random.randint(-num, num))
-print(f'Ваш список: {arr}')
+player1 = input('Введите имя первого игрока: ')
+player2 = input('Введите имя второго игрока: ')
 
-path = 'file.txt'
-data = open(path, 'w')
-data.write('2\n')
-data.write('4\n')
-data.close()
+def getToss():
 
-path = 'file.txt'
-data = open(path, 'r')
-multiply = 1
-for line in data:
-    multiply *= arr[int(line)]
-print(multiply)
+    toss = random.randint(1, 2)
+    print(f'Подбрасываем монетку...')
+    print(f'Ух ты, чуть на ребро не встала! Что же там выпало..?')
+
+    if toss == 1:
+        print(f'Решка! Первым ходит {player1}.')
+        return (toss)
+    elif toss == 2:
+        print(f'Орёл! Первым ходит {player2}.')
+        return (toss)
+
+def turns(gotToss):
+
+    startPoints = int(input('Введите стартовое количество конфет: '))
+    maxPointsPR = int(input('Введите максимальное количество конфет, которое можно взять за ход: '))
+
+    arrPlayer1 = []
+    arrPlayer2 = []
+
+    while startPoints >= 0:
+
+        if gotToss == 1:
+
+            tookPoints = int(input(f'{player1}, выберите количество конфет (от 1 до {maxPointsPR}): '))
+
+            while (tookPoints > 28) or (startPoints - tookPoints < 0):
+                print(f'Что-то не так... Либо конфет осталось меньше, чем вы хотите взять, либо вы выбрали число не от 1 до {maxPointsPR}.')
+                tookPoints = int(input(f'{player1}, выберите количество конфет (от 1 до {maxPointsPR}): '))
+
+            startPoints -= tookPoints
+
+            print(f'{player1} взял {tookPoints} конфет. Всего осталось: {startPoints} \n')
+
+            arrPlayer1.append(tookPoints)
+
+            if startPoints > 0:
+                gotToss = 2
+
+            elif startPoints == 0:
+                print(f'{player1} победил!')
+                break
+
+        if gotToss == 2:
+
+            tookPoints = int(input(f'{player2}, выберите количество конфет (от 1 до {maxPointsPR}): '))
+
+            while (tookPoints > 28) or (startPoints - tookPoints < 0):
+                print(f'Что-то не так... Либо конфет осталось меньше, чем вы хотите взять, либо вы выбрали число не от 1 до {maxPointsPR}.')
+                tookPoints = int(input(f'{player2}, выберите количество конфет (от 1 до {maxPointsPR}): '))
+
+            startPoints -= tookPoints
+
+            print(f'{player2} взял {tookPoints} конфет. Всего осталось: {startPoints} \n')
+
+            arrPlayer2.append(tookPoints)
+
+            if startPoints > 0:
+                gotToss = 1
+
+            elif startPoints == 0:
+                print(f'{player2} победил!')
+                break
+
+
+gotToss = getToss()
+
+turns(int(gotToss))
 '''
 '''
-## №5
-## Реализуйте алгоритм перемешивания списка.
+## №40
+## Реализуйте RLE алгоритм: реализуйте модуль сжатия и восстановления данных.
 
-import random
+def rle_encode(rawstring):
 
-def shuffling(_list: list):
-    shuffled_list = []
-    temp_list = _list
+    encoded = ''
+    prev_char = ''
+    count = 1
 
-    for _ in range(len(_list)):
-        position = random.randint(0, len(temp_list) - 1)
-        shuffled_list.append(temp_list.pop(position))
-    return shuffled_list
+    if not rawstring:
+        return ''
 
+    for char in rawstring:
+        if char != prev_char:
+            if prev_char:
+                encoded += str(count) + prev_char
 
-print(shuffling([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]))
+            count = 1
+            prev_char = char
+
+        else:
+            count += 1
+
+    else:
+        encoded += str(count) + prev_char
+
+    return encoded
+
+def rle_decode(encodedstring):
+
+    decode = ''
+    count = ''
+
+    for char in encodedstring:
+        if char.isdigit():
+            count += char
+
+        else:
+            decode += char * int(count)
+            count = ''
+
+    return decode
+
+def main():
+
+    print('Изначальная строка данных:')
+    rawtext = 'AAAAAAAAAAAAAAABBBBBBBBBBBBBCCCCCCCCDDDDDDDDDDDD'
+    print(rawtext)
+    print()
+
+    print('Сжатая строка данных:')
+    compressed_text = rle_encode(rawtext)
+    print(compressed_text)
+    print()
+
+    print('Распакованная строка:')
+    decompressed_text = rle_decode(compressed_text)
+    print(decompressed_text)
+
+if __name__ == '__main__':
+    main()
 '''
