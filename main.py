@@ -1,155 +1,66 @@
 '''
-## №38
-## Напишите программу, удаляющую из текста все слова, содержащие ""абв"".
+## №30
+## Заполните массив элементами арифметической прогрессии. Её первый элемент, разность и количество элементов нужно ввести с клавиатуры.
 
-firstStr = 'Михаил абв Калугин аБВ хотел написать АбВ код. Получилось как всегда. АБВ'
+n = int(input(f'Введите количество элементов прогрессии: '))
+nStart = int(input(f'Введите первый элемент прогрессии: '))
+nStep = int(input(f'Введите разность элементов прогрессии: '))
 
-secondStr = list(filter(lambda el: 'абв' not in el.lower(), firstStr.split() ))
+def getProgression():
 
-print(f'Изначальная строка: ')
-print(firstStr)
-print(f'Строка без слов, содержащих "АБВ": ')
-print(*secondStr)
+    arr = []
+    for _ in range(n):
+        arr.insert(i, (nStart + nStep * i))
+
+    return arr
+
+prog = getProgression()
+print(prog)
+
 '''
 '''
-## №2
-## Напишите программу, которая найдёт произведение пар чисел списка. Парой считаем первый и последний элемент, второй и предпоследний и т.д.
+## №31
+## Определить индексы элементов массива (списка), значения которых принадлежат заданному диапазону
 
-import random
+from random import randint
 
-player1 = input('Введите имя первого игрока: ')
-player2 = input('Введите имя второго игрока: ')
+low = int(input('Введите минимальный порог для чисел: '))
+high = int(input('Введите максимальный порог для чисел: '))
 
-def getToss():
+def getList():
 
-    toss = random.randint(1, 2)
-    print(f'Подбрасываем монетку...')
-    print(f'Ух ты, чуть на ребро не встала! Что же там выпало..?')
+    arr = [randint(-10, 10) for _ in range(10)]
+    print(f'Изначальный массив: {arr} \n')
 
-    if toss == 1:
-        print(f'Решка! Первым ходит {player1}.')
-        return (toss)
-    elif toss == 2:
-        print(f'Орёл! Первым ходит {player2}.')
-        return (toss)
+    return arr
 
-def turns(gotToss):
+def indexes(gotArr):
 
-    startPoints = int(input('Введите стартовое количество конфет: '))
-    maxPointsPR = int(input('Введите максимальное количество конфет, которое можно взять за ход: '))
-
-    arrPlayer1 = []
-    arrPlayer2 = []
-
-    while startPoints >= 0:
-
-        if gotToss == 1:
-
-            tookPoints = int(input(f'{player1}, выберите количество конфет (от 1 до {maxPointsPR}): '))
-
-            while (tookPoints > 28) or (startPoints - tookPoints < 0):
-                print(f'Что-то не так... Либо конфет осталось меньше, чем вы хотите взять, либо вы выбрали число не от 1 до {maxPointsPR}.')
-                tookPoints = int(input(f'{player1}, выберите количество конфет (от 1 до {maxPointsPR}): '))
-
-            startPoints -= tookPoints
-
-            print(f'{player1} взял {tookPoints} конфет. Всего осталось: {startPoints} \n')
-
-            arrPlayer1.append(tookPoints)
-
-            if startPoints > 0:
-                gotToss = 2
-
-            elif startPoints == 0:
-                print(f'{player1} победил!')
-                break
-
-        if gotToss == 2:
-
-            tookPoints = int(input(f'{player2}, выберите количество конфет (от 1 до {maxPointsPR}): '))
-
-            while (tookPoints > 28) or (startPoints - tookPoints < 0):
-                print(f'Что-то не так... Либо конфет осталось меньше, чем вы хотите взять, либо вы выбрали число не от 1 до {maxPointsPR}.')
-                tookPoints = int(input(f'{player2}, выберите количество конфет (от 1 до {maxPointsPR}): '))
-
-            startPoints -= tookPoints
-
-            print(f'{player2} взял {tookPoints} конфет. Всего осталось: {startPoints} \n')
-
-            arrPlayer2.append(tookPoints)
-
-            if startPoints > 0:
-                gotToss = 1
-
-            elif startPoints == 0:
-                print(f'{player2} победил!')
-                break
+    inds = [i for i, v in enumerate(gotArr) if low <= v <= high]
+    print(f'Индексы выбранных чисел: {inds} \n')
 
 
-gotToss = getToss()
+gotArr = getList()
 
-turns(int(gotToss))
+indexes(gotArr)
 '''
 '''
-## №40
-## Реализуйте RLE алгоритм: реализуйте модуль сжатия и восстановления данных.
+## №32
+## Напишите программу, которая на вход принимает два числа A и B, и возводит число А в целую степень B с помощью рекурсии.
 
-def rle_encode(rawstring):
+num = int(input(f'Введите число: '))
+exp = int(input(f'Введите степень: '))
 
-    encoded = ''
-    prev_char = ''
-    count = 1
+def power(num,exp):
 
-    if not rawstring:
-        return ''
+    if exp == 1:
+        return num
 
-    for char in rawstring:
-        if char != prev_char:
-            if prev_char:
-                encoded += str(count) + prev_char
+    elif exp == 0:
+        return 1
 
-            count = 1
-            prev_char = char
+    elif exp != 1 and exp != 0:
+        return (num * power(num, exp - 1))
 
-        else:
-            count += 1
-
-    else:
-        encoded += str(count) + prev_char
-
-    return encoded
-
-def rle_decode(encodedstring):
-
-    decode = ''
-    count = ''
-
-    for char in encodedstring:
-        if char.isdigit():
-            count += char
-
-        else:
-            decode += char * int(count)
-            count = ''
-
-    return decode
-
-def main():
-
-    print('Изначальная строка данных:')
-    rawtext = 'AAAAAAAAAAAAAAABBBBBBBBBBBBBCCCCCCCCDDDDDDDDDDDD'
-    print(rawtext)
-    print()
-
-    print('Сжатая строка данных:')
-    compressed_text = rle_encode(rawtext)
-    print(compressed_text)
-    print()
-
-    print('Распакованная строка:')
-    decompressed_text = rle_decode(compressed_text)
-    print(decompressed_text)
-
-if __name__ == '__main__':
-    main()
+print(f'Результат возведения числа {num} в {exp} степень: {power(num,exp)}')
 '''
